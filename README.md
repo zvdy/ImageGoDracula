@@ -1,22 +1,42 @@
-# ImageGoNord API
+# 🧛 ImageGoDracula  
 
 Due to the lack of Dracula themed wallpapers, I decided to create a simple API that converts images to the Dracula color palette.
 
 The project consists of a Flask API that uses the [ImageGoNord](https://github.com/TylerYep/ImageGoNord) library to convert uploaded images to the [Dracula](https://draculatheme.com/) color palette.
 
-## Examples
+## 📸 Examples
 
 ![Image](images/converted.jpg)
 
 ![Image](images/converted0.jpg)
 
-## Installation
+## ⚙️ Installation
 
 1. Clone this repository to your local machine.
 2. Install the required modules using `pip install -r requirements.txt`.
 3. Run the Flask app using `python main.py`.
 
-## Usage
+## 🐳 Docker
+
+You can also run the Flask app in a Docker container. To do so, follow these steps:
+
+1. Build the Docker image using the following command:
+
+   ```
+   docker build -t imagegodracula .
+   ```
+
+2. Run the Docker container using the following command:
+
+   ```
+   docker run -p 5000:5000 imagegodracula
+   ```
+
+   This command runs the Docker container and maps port 5000 on the host to port 5000 in the container. You can then access the Flask app by visiting `http://localhost:5000` in your web browser.
+
+> You can also docker pull the Docker image from my [Docker Hub](https://hub.docker.com/u/zvdy) 
+
+## 🔨 Usage
 
 You can use `curl` to test the API by sending a POST request with an image file. Here's an example command:
 
@@ -45,6 +65,6 @@ go_nord.add_color_to_palette('#F1FA8C')
 
 > You can add or remove colors from the palette by calling `go_nord.add_color_to_palette()` or `go_nord.remove_color_from_palette()`, respectively.
 
-## License
+## 📰 License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
