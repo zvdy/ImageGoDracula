@@ -4,17 +4,17 @@ from ImageGoNord import GoNord
 
 go_nord = GoNord()
 go_nord.reset_palette()
-go_nord.add_color_to_palette('#282a36')
-go_nord.add_color_to_palette('#44475a')
-go_nord.add_color_to_palette('#F8F8F2')
-go_nord.add_color_to_palette('#6272A4')
-go_nord.add_color_to_palette('#BD93F9')
-go_nord.add_color_to_palette('#8BE9FD')
-go_nord.add_color_to_palette('#50FA7B')
-go_nord.add_color_to_palette('#FFB86C')
-go_nord.add_color_to_palette('#FF79C6')
-go_nord.add_color_to_palette('#FF5555')
-go_nord.add_color_to_palette('#F1FA8C')
+go_nord.add_color_to_palette('#1a1b26')
+go_nord.add_color_to_palette('#24283b')
+go_nord.add_color_to_palette('#cfc9c2')
+go_nord.add_color_to_palette('#565f89')
+go_nord.add_color_to_palette('#bb9af7')
+go_nord.add_color_to_palette('#7dcfff')
+go_nord.add_color_to_palette('#9ece6a')
+go_nord.add_color_to_palette('#e0af68')
+go_nord.add_color_to_palette('#f7768e')
+go_nord.add_color_to_palette('#8c4351')
+go_nord.add_color_to_palette('#ff9e64')
 
 app = Flask(__name__)
 
@@ -22,7 +22,7 @@ app = Flask(__name__)
 def convert_image():
     # Check if the post request has the file part
     if 'file' not in request.files:
-        return {'message': 'No file part'}, 400
+        return {'message': 'No file part in the request'}, 400
 
     file = request.files['file']
 
@@ -31,16 +31,26 @@ def convert_image():
     if file.filename == '':
         return {'message': 'No selected file'}, 400
 
-    # Save the uploaded file to disk
-    filename = file.filename
-    file.save(os.path.join(app.root_path, filename))
+    try:
+        # Save the uploaded file to disk
+        filename = file.filename
+        file_path = os.path.join(app.root_path, filename)
+        file.save(file_path)
+    except Exception as e:
+        return {'message': f'Failed to save the file: {str(e)}'}, 500
 
-    # Load the image and convert it
-    image = go_nord.open_image(os.path.join(app.root_path, filename))
-    go_nord.convert_image(image, save_path=os.path.join(app.root_path, 'processed.jpg'))
+    try:
+        # Load the image and convert it
+        image = go_nord.open_image(file_path)
+        go_nord.convert_image(image, save_path=os.path.join(app.root_path, 'processed.jpg'))
+    except Exception as e:
+        return {'message': f'Failed to process the image: {str(e)}'}, 500
 
-    # Return the converted image
-    return send_file(os.path.join(app.root_path, 'processed.jpg'), mimetype='image/jpeg')
+    try:
+        # Return the converted image
+        return send_file(os.path.join(app.root_path, 'processed.jpg'), mimetype='image/jpeg')
+    except Exception as e:
+        return {'message': f'Failed to send the processed image: {str(e)}'}, 500
 
 if __name__ == '__main__':
     app.run(debug=True)
